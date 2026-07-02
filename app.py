@@ -59,6 +59,7 @@ with right1:
 - 📑 Clause segmentation
 - 📊 Aspect-level sentiment analysis
 - 🎯 Prediction confidence score
+<br><br>
 """)
 
 # ============================================
