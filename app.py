@@ -84,11 +84,11 @@ with col2:
 
     st.write("")
 
-with st.container(border=True):
+    with st.container(border=True):
 
-    st.subheader("🎯 Target Users")
+        st.subheader("🎯 Target Users")
 
-    st.markdown("""
+        st.markdown("""
 This system is intended for hotel management to:
 
 - 📊 Monitor customer satisfaction
