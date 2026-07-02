@@ -330,14 +330,22 @@ with st.expander("🤖 Hotel Management Assistant", expanded=True):
 
         with st.spinner("Analysing hotel performance..."):
 
-            answer = ask_llm(
-                selected_hotel,
-                compare_hotel,
-                sentiment_counts,
-                comparison,
-                recommendations,
-                question
-            )
+            try:
+                answer = ask_llm(
+                    selected_hotel,
+                    compare_hotel,
+                    sentiment_counts,
+                    comparison,
+                    recommendations,
+                    question
+                )
+
+            except Exception as e:
+                answer = (
+                    "⚠️ The AI assistant is temporarily unavailable.\n\n"
+                    "This is usually caused by the Gemini API quota or rate limit being exceeded. "
+                    "Please try again later."
+                )
 
         st.session_state.messages.append(
             {
