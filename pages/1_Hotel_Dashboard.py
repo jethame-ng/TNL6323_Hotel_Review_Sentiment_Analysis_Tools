@@ -40,6 +40,7 @@ st.subheader("Sentiment Distribution")
 
 fig, ax = plt.subplots()
 sentiment_counts.plot(kind="bar", ax=ax)
+ax.figure.set_size_inches(8, 5)
 ax.set_xlabel("Sentiment")
 ax.set_ylabel("Number of Reviews")
 ax.set_title("Sentiment Distribution")
