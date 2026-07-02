@@ -3,3 +3,6 @@ pandas
 scikit-learn
 matplotlib
 joblib
+numpy
+xgboost
+gensim
