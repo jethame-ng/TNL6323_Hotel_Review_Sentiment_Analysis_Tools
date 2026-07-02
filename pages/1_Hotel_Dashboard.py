@@ -57,4 +57,4 @@ else:
 
 st.subheader("Review Data Preview")
 
-st.dataframe(filtered_df.head(20))
+st.dataframe(filtered_df)
