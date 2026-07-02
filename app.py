@@ -31,11 +31,11 @@ st.header("🚀 System Features")
 col1, col2 = st.columns(2)
 
 # -----------------------
-# Left Column
+# Row 1
 # -----------------------
 
-with col1:
-
+row1_col1, row1_col2 = st.columns(2)
+with row1_col1:
     with st.container(border=True):
 
         st.subheader("📊 Hotel Dashboard")
@@ -50,7 +50,8 @@ with col1:
 """)
 
     st.write("")
-
+    
+with row1_col2:
     with st.container(border=True):
 
         st.subheader("🤖 AI Hotel Management Assistant")
@@ -65,11 +66,11 @@ with col1:
 """)
 
 # ------------------------
-# Right Column
+# Row 1
 # ------------------------
 
-with col2:
-
+row2_col1, row2_col2 = st.columns(2)
+with row2_col1:
     with st.container(border=True):
 
         st.subheader("📝 Analyse New Review")
@@ -84,6 +85,7 @@ with col2:
 
     st.write("")
 
+with row2_col2:
     with st.container(border=True):
 
         st.subheader("🎯 Target Users")
