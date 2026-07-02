@@ -26,6 +26,13 @@ def ask_llm(
         question,
     )
 
+    try:
     response = model.generate_content(prompt)
-
     return response.text
+
+    except Exception as e:
+        return (
+            "The AI assistant is temporarily unavailable due to API quota or service limits. "
+            "Based on the dashboard results, please refer to the benchmark comparison, top strengths, "
+            "top issues, and management recommendations shown above."
+        )
