@@ -2,6 +2,7 @@ import google.generativeai as genai
 import streamlit as st
 
 from chatbot.prompt import build_prompt
+from google.api_core.exceptions import ResourceExhausted
 
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
@@ -26,6 +27,15 @@ def ask_llm(
         question,
     )
 
-    response = model.generate_content(prompt)
-    
-    return response.text
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+
+    except ResourceExhausted:
+        return (
+            "⚠️ Gemini API quota exceeded.\n\n"
+            "Please try again later."
+        )
+
+    except Exception as e:
+        return f"LLM Error: {e}"

@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from chatbot.assistant import ask_llm
 
+
 st.set_page_config(
     page_title="Hotel Dashboard",
     page_icon="📊",
@@ -330,22 +331,15 @@ with st.expander("🤖 Hotel Management Assistant", expanded=True):
 
         with st.spinner("Analysing hotel performance..."):
 
-            try:
-                answer = ask_llm(
-                    selected_hotel,
-                    compare_hotel,
-                    sentiment_counts,
-                    comparison,
-                    recommendations,
-                    question
-                )
+            answer = ask_llm(
+                selected_hotel,
+                compare_hotel,
+                sentiment_counts,
+                comparison,
+                recommendations,
+                question
+            )
 
-            except Exception as e:
-                answer = (
-                    "⚠️ The AI assistant is temporarily unavailable.\n\n"
-                    "This is usually caused by the Gemini API quota or rate limit being exceeded. "
-                    "Please try again later."
-                )
 
         st.session_state.messages.append(
             {

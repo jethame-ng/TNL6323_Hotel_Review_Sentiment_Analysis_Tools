@@ -28,14 +28,13 @@ st.divider()
 
 st.header("🚀 System Features")
 
-col1, col2 = st.columns(2)
-
-# -----------------------
+# ============================================
 # Row 1
-# -----------------------
+# ============================================
 
-row1_col1, row1_col2 = st.columns(2)
-with row1_col1:
+left1, right1 = st.columns(2)
+
+with left1:
     with st.container(border=True):
 
         st.subheader("📊 Hotel Dashboard")
@@ -49,9 +48,26 @@ with row1_col1:
 - 🤖 AI Hotel Management Assistant
 """)
 
-    st.write("")
-    
-with row1_col2:
+with right1:
+    with st.container(border=True):
+
+        st.subheader("📝 Analyse New Review")
+
+        st.markdown("""
+- 😊 Overall sentiment prediction
+- ⭐ Hotel aspect detection
+- 📑 Clause segmentation
+- 📊 Aspect-level sentiment analysis
+- 🎯 Prediction confidence score
+""")
+
+# ============================================
+# Row 2
+# ============================================
+
+left2, right2 = st.columns(2)
+
+with left2:
     with st.container(border=True):
 
         st.subheader("🤖 AI Hotel Management Assistant")
@@ -65,27 +81,7 @@ with row1_col2:
 - ❓ Interactive question answering
 """)
 
-# ------------------------
-# Row 1
-# ------------------------
-
-row2_col1, row2_col2 = st.columns(2)
-with row2_col1:
-    with st.container(border=True):
-
-        st.subheader("📝 Analyse New Review")
-
-        st.markdown("""
-- 😊 Overall sentiment prediction
-- ⭐ Hotel aspect detection
-- 📑 Clause segmentation
-- 📊 Aspect-level sentiment analysis
-- 🎯 Prediction confidence score
-""")
-
-    st.write("")
-
-with row2_col2:
+with right2:
     with st.container(border=True):
 
         st.subheader("🎯 Target Users")
