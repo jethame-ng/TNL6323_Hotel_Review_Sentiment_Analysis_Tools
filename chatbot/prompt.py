@@ -18,22 +18,18 @@ Current Hotel:
 Benchmark Hotel:
 {compare_hotel}
 
-Overall Sentiment:
-- Positive: {sentiment_counts.get("Positive",0)}
-- Neutral: {sentiment_counts.get("Neutral",0)}
-- Negative: {sentiment_counts.get("Negative",0)}
+Overall Sentiment
+Positive: {sentiment_counts.get("Positive",0)}
+Neutral: {sentiment_counts.get("Neutral",0)}
+Negative: {sentiment_counts.get("Negative",0)}
 
-Aspect Comparison:
+Aspect Comparison
 {comparison.to_markdown()}
 
-Current Rule-Based Recommendations:
+Current Recommendations
 {chr(10).join(recommendations)}
 
-Instructions:
-- Answer only using the dashboard information above.
-- Do not invent statistics.
-- Explain clearly.
-- Give practical recommendations for hotel management.
+Only answer based on the information above.
 
 User Question:
 {question}
