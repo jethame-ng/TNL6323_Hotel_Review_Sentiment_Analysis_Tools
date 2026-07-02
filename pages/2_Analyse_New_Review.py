@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import re
-import joblib
+
+from utils.predictor import predict_sentiment, split_sentences
 
 st.set_page_config(
     page_title="Analyse New Review",
@@ -17,54 +17,48 @@ st.write(
 )
 
 # ==========================================================
-# Load Model
-# ==========================================================
-
-# Replace with your own model
-# sentiment_model = joblib.load("models/sentiment_model.pkl")
-# vectorizer = joblib.load("models/tfidf_vectorizer.pkl")
-
-# ==========================================================
-# Text Preprocessing
-# ==========================================================
-
-def preprocess(text):
-    text = text.lower()
-    text = re.sub(r'[^a-zA-Z\s]', '', text)
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
-
-# ==========================================================
 # Aspect Dictionary
 # ==========================================================
 
 aspect_keywords = {
+
     "Room": [
         "room","bed","pillow","suite","balcony"
     ],
+
     "Staff": [
-        "staff","reception","receptionist","employee",
-        "manager","service"
+        "staff","reception","receptionist",
+        "employee","manager","service"
     ],
+
     "Cleanliness": [
-        "clean","dirty","cleanliness","smell","dust"
+        "clean","dirty","cleanliness",
+        "smell","dust"
     ],
+
     "Location": [
-        "location","near","far","airport","station"
+        "location","near","far",
+        "airport","station"
     ],
+
     "Breakfast": [
-        "breakfast","buffet","food","meal","restaurant"
+        "breakfast","buffet",
+        "food","meal","restaurant"
     ],
+
     "WiFi": [
         "wifi","internet","network"
     ],
+
     "Parking": [
         "parking","car park"
     ],
+
     "Bathroom": [
         "bathroom","toilet","shower"
     ]
 }
+
 
 # ==========================================================
 # Detect Aspects
@@ -83,65 +77,33 @@ def detect_aspects(review):
 
     return detected
 
-# ==========================================================
-# Aspect Sentiment (Simple Rule Version)
-# ==========================================================
 
-positive_words = [
-    "good","great","excellent","clean","friendly",
-    "comfortable","nice","amazing","love",
-    "perfect","spacious","fast"
-]
-
-negative_words = [
-    "bad","dirty","poor","slow","worst",
-    "terrible","awful","small","noisy",
-    "uncomfortable","disappointing"
-]
+# ==========================================================
+# Aspect Sentiment using DistilBERT
+# ==========================================================
 
 def aspect_sentiment(review, aspect):
 
-    text = review.lower()
+    sentences = split_sentences(review)
 
-    pos = sum(word in text for word in positive_words)
-    neg = sum(word in text for word in negative_words)
+    keywords = aspect_keywords[aspect]
 
-    if pos > neg:
-        return "😊 Positive"
+    related_sentences = []
 
-    elif neg > pos:
-        return "☹ Negative"
+    for sentence in sentences:
 
-    else:
-        return "😐 Neutral"
+        if any(keyword in sentence.lower() for keyword in keywords):
+            related_sentences.append(sentence)
 
-# ==========================================================
-# Overall Sentiment
-# ==========================================================
+    if len(related_sentences) == 0:
+        related_sentences.append(review)
 
-def predict_sentiment(review):
+    aspect_text = " ".join(related_sentences)
 
-    # -------------------------
-    # Replace this with your model
-    # processed = preprocess(review)
-    # vector = vectorizer.transform([processed])
-    # prediction = sentiment_model.predict(vector)[0]
-    # return prediction
-    # -------------------------
+    sentiment, confidence = predict_sentiment(aspect_text)
 
-    text = review.lower()
+    return sentiment, confidence
 
-    pos = sum(word in text for word in positive_words)
-    neg = sum(word in text for word in negative_words)
-
-    if pos > neg:
-        return "😊 Positive"
-
-    elif neg > pos:
-        return "☹ Negative"
-
-    else:
-        return "😐 Neutral"
 
 # ==========================================================
 # User Input
@@ -149,23 +111,52 @@ def predict_sentiment(review):
 
 review = st.text_area(
     "Enter Hotel Review",
+    placeholder="Example:\nThe room was spacious and clean. The receptionist was rude but breakfast was delicious.",
     height=180
 )
 
-if st.button("Analyse Review"):
+
+if st.button("Analyse Review", type="primary"):
 
     if review.strip() == "":
-        st.warning("Please enter a review.")
+
+        st.warning("Please enter a hotel review.")
 
     else:
 
-        st.divider()
+        # ----------------------------------------------------
+        # Overall Sentiment
+        # ----------------------------------------------------
 
-        overall = predict_sentiment(review)
+        overall, confidence = predict_sentiment(review)
+
+        st.divider()
 
         st.subheader("Overall Sentiment")
 
-        st.success(overall)
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            if "Positive" in overall:
+                st.success(overall)
+
+            elif "Negative" in overall:
+                st.error(overall)
+
+            else:
+                st.info(overall)
+
+        with col2:
+
+            st.metric(
+                "Confidence",
+                f"{confidence:.2%}"
+            )
+
+        # ----------------------------------------------------
+        # Detected Aspects
+        # ----------------------------------------------------
 
         st.divider()
 
@@ -175,26 +166,51 @@ if st.button("Analyse Review"):
 
         if len(aspects) == 0:
 
-            st.info("No predefined aspect detected.")
+            st.info("No predefined hotel aspects detected.")
 
         else:
 
-            st.write(", ".join(aspects))
+            icons = {
+                "Room":"🛏️",
+                "Staff":"👨‍💼",
+                "Cleanliness":"🧹",
+                "Location":"📍",
+                "Breakfast":"🍽️",
+                "WiFi":"📶",
+                "Parking":"🚗",
+                "Bathroom":"🚿"
+            }
+
+            st.write(
+                " | ".join(
+                    f"{icons[a]} **{a}**"
+                    for a in aspects
+                )
+            )
+
+            # ------------------------------------------------
+            # Aspect Sentiment
+            # ------------------------------------------------
 
             st.divider()
 
-            st.subheader("Aspect Sentiments")
+            st.subheader("Aspect Sentiment Analysis")
 
-            result = []
+            results = []
 
             for aspect in aspects:
 
-                result.append({
+                sentiment, conf = aspect_sentiment(review, aspect)
+
+                results.append({
+
                     "Aspect": aspect,
-                    "Sentiment": aspect_sentiment(review, aspect)
+                    "Sentiment": sentiment,
+                    "Confidence": f"{conf:.2%}"
+
                 })
 
-            result_df = pd.DataFrame(result)
+            result_df = pd.DataFrame(results)
 
             st.dataframe(
                 result_df,
