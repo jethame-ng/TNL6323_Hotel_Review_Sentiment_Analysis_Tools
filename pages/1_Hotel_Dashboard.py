@@ -38,13 +38,7 @@ col3.metric("Negative", sentiment_counts.get("Negative", 0))
 
 st.subheader("Sentiment Distribution")
 
-fig, ax = plt.subplots()
-sentiment_counts.plot(kind="bar", ax=ax)
-ax.figure.set_size_inches(8, 5)
-ax.set_xlabel("Sentiment")
-ax.set_ylabel("Number of Reviews")
-ax.set_title("Sentiment Distribution")
-st.pyplot(fig)
+st.bar_chart(sentiment_counts)
 
 st.subheader("Sentiment Trend by Year")
 
