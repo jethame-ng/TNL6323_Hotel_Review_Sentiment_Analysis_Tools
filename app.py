@@ -10,11 +10,9 @@ st.set_page_config(
 # Header
 # =====================================================
 
-st.title("🏨 Intelligent Hotel Review Sentiment Analysis System")
+st.title("🏨 AI-Powered Hotel Review Analytics and Sentiment Analysis System")
 
 st.markdown("""
-### AI-Powered Hotel Review Analytics & Decision Support Platform
-
 This intelligent system assists hotel management in analysing customer reviews using
 **AI-powered sentiment analysis**, **aspect-based analytics**, **benchmark comparison**,
 and an **LLM-powered management assistant** to support data-driven decision making.
