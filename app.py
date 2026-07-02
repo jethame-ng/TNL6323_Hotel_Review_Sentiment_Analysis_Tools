@@ -60,7 +60,7 @@ with right1:
 - 📊 Aspect-level sentiment analysis
 - 🎯 Prediction confidence score
 <br><br>
-""")
+""",unsafe_allow_html=True)
 
 # ============================================
 # Row 2
