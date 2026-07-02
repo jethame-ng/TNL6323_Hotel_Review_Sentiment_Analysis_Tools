@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+from chatbot.assistant import ask_llm
 
 st.set_page_config(
     page_title="Hotel Dashboard",
@@ -164,6 +165,45 @@ for aspect, score in issues.items():
     )
 
 
+# Management Recommendations
+
+st.subheader("💡 Management Recommendations")
+
+recommendations = []
+
+# Worst performing aspect
+worst_aspect = comparison["Difference"].idxmin()
+worst_gap = comparison["Difference"].min()
+
+recommendations.append(
+    f"Prioritise improvements in **{worst_aspect}**, as it performs **{abs(worst_gap):.1f}% lower** than {compare_hotel}."
+)
+
+# Best aspect
+best_aspect = comparison["Difference"].idxmax()
+best_gap = comparison["Difference"].max()
+
+recommendations.append(
+    f"Maintain the excellent performance in **{best_aspect}**, which performs **{best_gap:.1f}% better** than {compare_hotel}."
+)
+
+# Overall sentiment
+positive = sentiment_counts.get("Positive", 0)
+negative = sentiment_counts.get("Negative", 0)
+
+if negative > positive * 0.5:
+    recommendations.append(
+        "Negative sentiment is relatively high. Consider analysing customer complaints to improve service quality."
+    )
+else:
+    recommendations.append(
+        "Overall customer satisfaction is positive. Continue maintaining service quality while improving weaker aspects."
+    )
+
+for i, rec in enumerate(recommendations, 1):
+    st.info(f"**Recommendation {i}**\n\n{rec}")
+
+
 # Review Preview
 
 st.divider()
@@ -214,3 +254,69 @@ st.dataframe(
     use_container_width=True,
     hide_index=True
 )
+
+# -------------------------------
+# Hotel Management Assistant
+# -------------------------------
+
+st.divider()
+
+st.subheader("🤖 Hotel Management Assistant")
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Show previous conversation
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
+
+suggestions = [
+    "Summarize customer feedback",
+    "Which aspect should we improve first?",
+    "Compare with competitor",
+    "Generate management recommendations",
+    "What are our strengths?"
+]
+
+selected_question = st.selectbox(
+    "Suggested Question",
+    [""] + suggestions
+)
+
+user_question = st.chat_input("Ask the Hotel Management Assistant...")
+
+question = user_question if user_question else selected_question
+
+if question:
+
+    st.session_state.messages.append(
+        {
+            "role": "user",
+            "content": question
+        }
+    )
+
+    with st.chat_message("user"):
+        st.write(question)
+
+    with st.spinner("Analysing hotel performance..."):
+
+        answer = ask_llm(
+            selected_hotel,
+            compare_hotel,
+            sentiment_counts,
+            comparison,
+            recommendations,
+            question,
+        )
+
+    st.session_state.messages.append(
+        {
+            "role": "assistant",
+            "content": answer
+        }
+    )
+
+    with st.chat_message("assistant"):
+        st.write(answer)
