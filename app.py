@@ -46,26 +46,6 @@ for folder in ["data", "model"]:
 
 st.success(f"Total Project Size: {total_size/(1024*1024):.2f} MB")
 
-# Function to calculate memory usage
-def get_memory_usage():
-    process = psutil.Process(os.getpid())
-    # Convert bytes to Megabytes
-    return process.memory_info().rss / (1024 ** 2) 
-
-st.title("My Streamlit App")
-
-# Expandable Resource Monitor in the Sidebar
-with st.sidebar.expander("📊 Live Resource Monitor"):
-    current_ram = get_memory_usage()
-    st.metric(label="Current RAM Usage", value=f"{current_ram:.2f} MB")
-    
-    # Progress bar mapping against the baseline 1024 MB (1GB) limit
-    ram_percentage = min(int((current_ram / 1024) * 100), 100)
-    st.progress(ram_percentage)
-    
-    if current_ram > 800:
-        st.warning("⚠️ Approaching the 1 GB baseline RAM limit!")
-
 total, used, free = shutil.disk_usage("/")
 
 st.write(f"Total Disk : {total // (1024**3)} GB")
