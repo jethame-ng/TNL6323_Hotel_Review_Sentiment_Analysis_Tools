@@ -2,10 +2,15 @@ from transformers import AutoTokenizer,AutoModelForSequenceClassification
 import torch
 import re
 
-MODEL_PATH="model/best_distilbert"
+# MODEL_PATH="model/best_distilbert"
 
-tokenizer=AutoTokenizer.from_pretrained(MODEL_PATH)
-model=AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
+# tokenizer=AutoTokenizer.from_pretrained(MODEL_PATH)
+# model=AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
+
+MODEL_NAME = "mei214/best_distilbert"
+
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
 
 model.eval()
 

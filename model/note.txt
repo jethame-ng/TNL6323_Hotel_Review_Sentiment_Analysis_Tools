@@ -1,0 +1,1 @@
+The model is uploaded to Hugging Face Hub
