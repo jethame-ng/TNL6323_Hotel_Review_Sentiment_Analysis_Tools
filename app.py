@@ -9,7 +9,7 @@ st.set_page_config(
 st.title("🏨 Hotel Review Sentiment Analysis Tools")
 
 st.write("""
-This system helps hotel management analyze customer reviews, compare hotel performance,
+This system helps hotel management analyse customer reviews, compare hotel performance,
 identify sentiment trends, and support decision-making based on review data.
 """)
 
@@ -19,7 +19,7 @@ st.markdown("""
 1. **Hotel Dashboard**  
    Compare overall sentiment, aspect-based sentiment, and review trends across hotels.
 
-2. **Analyze New Review**  
+2. **Analyse New Review**  
    Enter a new hotel review to predict sentiment and detect related service aspects.
 """)
 
