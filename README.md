@@ -166,14 +166,6 @@ streamlit run app.py
 
 The application will open automatically.
 
-Otherwise, open
-
-```
-http://localhost:8501
-```
-
-in your browser.
-
 The sentiment classification model is hosted on the **Hugging Face Hub** and is automatically loaded during execution.
 
 ---
